@@ -33,8 +33,8 @@ def open_serial(dev, speed, show_info=False):
 def read_serial(ser, stop):
 	angleZ = 0.00
 	angleY = 0.00
-	angleX = 0.00	
-	
+	angleX = 0.00
+
 	angleDir = 0.00
 	while True:
 		rec = ser.readline().rstrip()
@@ -42,7 +42,7 @@ def read_serial(ser, stop):
 			print(rec)
 			if('Z' in rec):
 				angleZ = rec.split('=')[1]
-				print(angleZ)		
+				print(angleZ)
 				angleZ = float(angleZ)
 				angleZ = math.ceil(angleZ)
 				print(angleZ)
@@ -54,9 +54,9 @@ def read_serial(ser, stop):
 				angleX = rec.split('=')[1]
 				angleX = float(angleX)
 				angleX = math.ceil(angleX)
-			
+
 			#angle = float(rec)
- 		if stop():
+		if stop():
 			break
 
 		global done, degree, screen, FPSCLOCK, SIZE
@@ -66,12 +66,11 @@ def read_serial(ser, stop):
 				done = True
 				break
 
-		if(angleY > 45 and angleY < 270):
+		if(angleY > 45 and angleY < 135):
 			angleDir = angleZ
-		#elif(angleY <= 45 and angleY >= 270):
+		#elif((angleY <= 45 or angleY >= 315 or (angleY >= 135 and angleY <= 225)):
 		else:
 			angleDir = angleX
-	
 
 		radar = (400.00,400.00)
 		radar_len = 100.00
@@ -85,24 +84,24 @@ def read_serial(ser, stop):
 
 		radar2 = (625.00,400.00)
 		radar_len2 = 100.00
-		xb = radar2[0] + math.cos(math.radians(angleY+ 180.00)) * radar_len
-		yb = radar2[1] + math.sin(math.radians(angleY+ 180.00)) * radar_len
+		xb = radar2[0] + math.cos(math.radians(angleY + 180.00)) * radar_len
+		yb = radar2[1] + math.sin(math.radians(angleY + 180.00)) * radar_len
 
-		x2b = radar2[0] + math.cos(math.radians(angleY )) * radar_len
+		x2b = radar2[0] + math.cos(math.radians(angleY)) * radar_len
 		y2b = radar2[1] + math.sin(math.radians(angleY)) * radar_len
 
 		radar3 = (175.00,400.00)
 		radar_len2 = 100.00
-		xc = radar3[0] + math.cos(math.radians(angleX+ 180.00)) * radar_len
-		yc = radar3[1] + math.sin(math.radians(angleX+ 180.00)) * radar_len
+		xc = radar3[0] + math.cos(math.radians(angleX + 180.00)) * radar_len
+		yc = radar3[1] + math.sin(math.radians(angleX + 180.00)) * radar_len
 
-		x2c = radar3[0] + math.cos(math.radians(angleX )) * radar_len
+		x2c = radar3[0] + math.cos(math.radians(angleX)) * radar_len
 		y2c = radar3[1] + math.sin(math.radians(angleX)) * radar_len
 
 		radar4 = (400.00,600.00)
 		radar_len2 = 100.00
-		xd = radar4[0] + math.cos(math.radians(angleDir+ 180.00)) * radar_len
-		yd = radar4[1] + math.sin(math.radians(angleDir+ 180.00)) * radar_len
+		xd = radar4[0] + math.cos(math.radians(angleDir + 180.00)) * radar_len
+		yd = radar4[1] + math.sin(math.radians(angleDir + 180.00)) * radar_len
 
 		x2d = radar4[0] + math.cos(math.radians(angleDir)) * radar_len
 		y2d = radar4[1] + math.sin(math.radians(angleDir)) * radar_len
@@ -118,7 +117,7 @@ def read_serial(ser, stop):
 		pygame.draw.line(screen, Color("green"), radar4, (xd,yd), 1)
 		pygame.draw.line(screen, Color("green"), radar4, (x2d,y2d), 1)
 
-		pygame.display.flip()   
+		pygame.display.flip()
 		degree+=5
 		FPSCLOCK.tick(40)
 
@@ -143,4 +142,4 @@ if __name__ == "__main__":
 			ser.write(x + '\n')
 	except:
 		stop = True
-		ser.close()
+ser.close()
