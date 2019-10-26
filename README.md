@@ -1,8 +1,13 @@
 # IOT-controle
+
 Repositório para os códigos do trabalho final da disciplina de IOT - UFSM
 
+* [controle.py](controle.py): Lê a serial e, caso tenha recebido valores dos dispositivos, faz o processamento utilizando o cálculo de [teste.py](controle-teste.py) para publicar os valores via MQTT.
+* [controle-teste.py](controle-teste.py): Recebe duas entradas (x e y), entre -128 e 128, para processar e mostrar a saída que será passada aos motores.
+
 Arduino:
-´´´
+
+```
 //Written by Ahmet Burkay KIRNIK
 //TR_CapaFenLisesi
 //Measure Angle with a MPU-6050(GY-521)
@@ -56,11 +61,12 @@ void loop(){
      Serial.println("-----------------------------------------");
      delay(400);
 }
-´´´
+```
 
 
 DRAW LINE:
-´´´
+
+```
 # -*- coding: iso-8859-1 -*-
 
 import sys
@@ -149,4 +155,4 @@ if __name__ == "__main__":
 		stop = True
 		ser.close()
 
-´´´
+```
