@@ -2,7 +2,7 @@
 
 Lê os valores da serial (joystick/volante) e publica via MQTT
 
-""" 
+"""
 
 import serial, sys, time
 import paho.mqtt.client as mqtt
@@ -16,7 +16,7 @@ DEVICE='/dev/ttyUSB0'
 SPEED=9600
 BROKER='address'
 
-# 
+#
 def open_serial(dev, speed, show_info=False):
     ser = serial.Serial(dev, speed, timeout=1)
     time.sleep(0.5)
@@ -26,7 +26,7 @@ def open_serial(dev, speed, show_info=False):
         print ('Settings:\n %s ' % (ser))
     return ser
 
-    
+
 #
 if __name__ == "__main__":
     if len(sys.argv) == 2:
@@ -39,30 +39,44 @@ if __name__ == "__main__":
 
     stop=False
 
-    pub = mqtt.Client()
-    pub.connect(BROKER)
-    
-    try: 
-        while True:
-            rec = ser.readline().rstrip()
-            if rec != '': # rec -> 'x,y'
-                # separa os valores
-                x = rec.split(',')[0]
-                y = rec.split(',')[1]
-                # calcula os valores base para os motores
-                if (x >= 0):
-                    left = y
-                    right = y - map(x, 0, 128, 0, y)
-                else:
-                    left = y + map(x, 0, 128, 0, y)
-                    right = y
-                # envia para o broker mqtt
-                output = 'L=' + str(left) + ',R=' + str(right)
-                pub.publish('kt/controle', output)
-            if stop():
-                break
-            time.sleep(0.1)
-    except:
-        stop = True
-        ser.close()
-        pub.disconnect()
+    #pub = mqtt.Client()
+    #pub.connect(BROKER)
+
+    #try:
+    while True:
+        rec = ser.readline().rstrip()
+
+        try:
+            rec = str(rec, 'utf-8')
+            # print(rec)
+        except:
+            print('Trying again')
+            rec = ''
+
+        if rec != '': # rec -> 'x,y'
+            x = int(rec.split(',')[0])
+            y = int(rec.split(',')[1])
+            # calcula os valores base para os motores
+            if (x >= 0):
+                left = y
+                right = y - map(x, 0, 128, 0, y)
+            else:
+                left = y + map(x, 0, 128, 0, y)
+                right = y
+            # envia para o broker mqtt
+            output = 'L=' + str(left) + ',R=' + str(right)
+            #pub.publish('kt/controle', output)
+
+            
+
+            print(output)
+        if stop:
+            break
+        #time.sleep(0.1)
+
+    #except:
+    print("Except:")
+    #print(e)
+    stop = True
+    ser.close()
+    #pub.disconnect()
