@@ -14,7 +14,7 @@ def map(value, in_min, in_max, out_min, out_max):
 #
 DEVICE='/dev/ttyUSB0'
 SPEED=9600
-BROKER='address'
+BROKER='10.42.0.1'
 
 #
 def open_serial(dev, speed, show_info=False):
@@ -39,8 +39,8 @@ if __name__ == "__main__":
 
     stop=False
 
-    #pub = mqtt.Client()
-    #pub.connect(BROKER)
+    pub = mqtt.Client()
+    pub.connect(BROKER)
 
     #try:
     while True:
@@ -63,13 +63,13 @@ if __name__ == "__main__":
             else:
                 left = y + map(x, 0, 128, 0, y)
                 right = y
-            # envia para o broker mqtt
+
             output = 'L=' + str(left) + ',R=' + str(right)
-            #pub.publish('kt/controle', output)
 
-            
-
+            # envia para o broker mqtt
+            pub.publish('kt/controle', output)
             print(output)
+
         if stop:
             break
         #time.sleep(0.1)
